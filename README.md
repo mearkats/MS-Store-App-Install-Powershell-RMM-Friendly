@@ -9,7 +9,7 @@ The Script Uses the "RunAsUser" module created by Kelvin Tegelaar (https://githu
 
 =======================================================================
 
-Look for this line in the script:
+Look for this line in the script (Line 40 - 43):
 ```powershell
 # Lets get it installed!
 & $wingetsys install --id=9WZDNCRFJBH4 -e -h --accept-package-agreements --accept-source-agreements | ConvertTo-Json | Out-File 'C:\Air-IT\Temp\WinGet.txt'
