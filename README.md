@@ -9,13 +9,12 @@ The Script Uses the "RunAsUser" module created by Kelvin Tegelaar (https://githu
 
 =======================================================================
 
-Look for this line in the script (Line 40 - 43):
-```powershell
-# Lets get it installed!
-& $wingetsys install --id=9WZDNCRFJBH4 -e -h --accept-package-agreements --accept-source-agreements | ConvertTo-Json | Out-File 'C:\Air-IT\Temp\WinGet.txt'
-}
-```
-the "--id=9WZDNCRFJBH4" needs to be changed to the ID of the MS App you are looking to install. This current one installs Microsoft Photos.
+List of well known apps which can be installed along with their IDs:
+
+App Name | ID
+--- | ---
+Microsoft Photos | `9WZDNCRFJBH4`
+Company Portal | `9WZDNCRFJ3PZ`
 
 ========================================================================
 
