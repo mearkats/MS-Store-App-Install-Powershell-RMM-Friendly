@@ -38,9 +38,19 @@ $wingetsys = $WingetCmd.Source
 }
 
 # Lets get it installed!
-& $wingetsys install --id=9WZDNCRFJBH4 -e -h --accept-package-agreements --accept-source-agreements
+& $wingetsys install --id=9WZDNCRFJBH4 -e -h --accept-package-agreements --accept-source-agreements | ConvertTo-Json | Out-File 'C:\Air-IT\Temp\WinGet.txt'
 }
 ############### END ###############
 
 # Attempt install
 invoke-ascurrentuser -scriptblock $installScript
+
+# Collect Output and display to RMM
+$Output = (get-content "C:\Air-IT\Temp\WinGet.txt" | convertfrom-json)
+$Output
+
+if ($Output -LIKE '*Successfully installed') {
+    Write Output 'Windows Store Application installed successfully'; Exit
+} else {
+    Write-Output 'Windows Store Application failed to install - Check above output for diagnostic information'; Exit 1
+}
