@@ -7,6 +7,8 @@ This script allows the user to install a Microsoft Store App. As the title sugge
 
 The Script Uses the ["RunAsUser"](https://github.com/KelvinTegelaar/RunAsUser) module created by [Kelvin Tegelaar](https://www.cyberdrain.com/). A user has to be logged in for the script to work. The script, as of 22/09/2022, will now feed the output of the installation into the RMM.
 
+As of the 29/09/2022, you can use the script with an enviroment variable using the App ID.
+
 =======================================================================
 
 List of well known apps which can be installed along with their IDs:
@@ -18,4 +20,4 @@ Company Portal | `9WZDNCRFJ3PZ`
 
 ========================================================================
 
-[Visit my website for more scripting goodness!](https://www.mearkats.co.uk)
+[Visit my website for more scripting goodness!](https://www.mearkats.co.uk/category/scripting/)
