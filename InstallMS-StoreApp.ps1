@@ -7,13 +7,14 @@ Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
 install-module RunAsUser 
 $ErrorActionPreference = "SilentlyContinue"
 New-Item -Path "C:\Temp" -Type Directory
-"$env:usrAppName" | ConvertTo-Json | Out-File 'C:\Temp\MSStore.txt'
+$env:usrAppName | Out-File 'C:\Temp\appid.txt'
 
 ############### SCRIPT START ###############
 $installScript = { $URL = 'https://github.com/microsoft/winget-cli/releases/download/v1.3.1872/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
 $destination = 'C:\Temp\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
 $wingetversion = winget --version 
 $wingetversion = $wingetversion.split('.')[1].Trim()
+$application = Get-Content -Path 'C:\Temp\appid.txt'
 
 # Check Version
 if ($wingetversion -lt 3) {
@@ -40,7 +41,7 @@ $wingetsys = $WingetCmd.Source
 }
 
 # Lets get it installed!
-& $wingetsys install --id=9WZDNCRFJBH4 -e -h --accept-package-agreements --accept-source-agreements | ConvertTo-Json | Out-File 'C:\Temp\WinGet.txt'
+& $wingetsys install --id=$application -e -h --accept-package-agreements --accept-source-agreements | ConvertTo-Json | Out-File 'C:\Temp\WinGet.txt'
 }
 ############### END ###############
 
@@ -53,7 +54,7 @@ $Output
 
 # Remove Log Files
 Remove-Item -Path 'C:\Temp\WinGet.txt' -Force
-Remove-Item -Path 'C:\Temp\MSStore.txt' -Force
+Remove-Item -Path 'C:\Temp\appid.txt' -Force
 
 # Verify the install completed successfully
 if ($Output -LIKE '*Successfully installed') {
