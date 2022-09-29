@@ -3,9 +3,9 @@
 # Microsoft Store Install Powershell Script - RMM Friendly!!
 
 Hello and welcome!
-This script allows the user to install a Microsoft Store App. As the title suggests, its RMM friendly, tested with Datto RMM and Tactical RMM.
+This script allows the user to install a Microsoft Store App. As the title suggests, its RMM friendly, tested with [Datto RMM](https://www.datto.com/products/rmm/) and [Tactical RMM](https://github.com/amidaware/tacticalrmm). 
 
-The Script Uses the "RunAsUser" module created by Kelvin Tegelaar (https://github.com/KelvinTegelaar/RunAsUser). A user has to be logged in for the script to work. The script, as of 22/09/2022, will now feed the output of the installation into the RMM.
+The Script Uses the ["RunAsUser"](https://github.com/KelvinTegelaar/RunAsUser) module created by [Kelvin Tegelaar](https://www.cyberdrain.com/). A user has to be logged in for the script to work. The script, as of 22/09/2022, will now feed the output of the installation into the RMM.
 
 =======================================================================
 
