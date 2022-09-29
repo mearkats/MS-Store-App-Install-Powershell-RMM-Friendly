@@ -1,6 +1,6 @@
 ![CroppedMK](https://user-images.githubusercontent.com/16869300/191701451-5550afce-b19f-4f8c-9e28-90777dd441e1.png)
 
-# Microsoft Store Install Powershell Script - RMM Friendly!!
+# Microsoft Store App Install Powershell Script - RMM Friendly!!
 
 Hello and welcome!
 This script allows the user to install a Microsoft Store App. As the title suggests, its RMM friendly, tested with [Datto RMM](https://www.datto.com/products/rmm/) and [Tactical RMM](https://github.com/amidaware/tacticalrmm). 
