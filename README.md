@@ -21,3 +21,5 @@ Company Portal | `9WZDNCRFJ3PZ`
 ========================================================================
 
 If you would like to learn more on how this script works or how to implement it into your RMM, please don't hesitate to contact me via [email](mailto:david@mearkats.co.uk) and I'll get back to you as soon as I can!
+
+If this script helped you, please give it a star to show your appreciation. 
