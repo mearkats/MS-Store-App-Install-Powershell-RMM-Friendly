@@ -9,6 +9,8 @@ The Script Uses the ["RunAsUser"](https://github.com/KelvinTegelaar/RunAsUser) m
 
 As of the 29/09/2022, you can use the script with an enviroment variable using the App ID.
 
+If this script helped you, please give it a star to show your appreciation. 
+
 =======================================================================
 
 List of well known apps which can be installed along with their IDs:
