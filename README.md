@@ -9,6 +9,8 @@ The Script Uses the ["RunAsUser"](https://github.com/KelvinTegelaar/RunAsUser) m
 
 As of the 29/09/2022, you can use the script with an enviroment variable using the App ID.
 
+As of 06/02/2023, Better error handling has been written into the script.
+
 If this script helped you, please give it a star to show your appreciation. 
 
 =======================================================================
@@ -19,6 +21,11 @@ App Name | ID
 --- | ---
 Microsoft Photos | `9WZDNCRFJBH4`
 Company Portal | `9WZDNCRFJ3PZ`
+Microsoft 365 (Office) | `9WZDNCRD29V9`
+Adobe Acrobat Reader DC | `XPDP273C0XHQH2`
+Adobe Creative Cloud | `XPDLPKWG9SW2WD`
+WhatsApp | `9NKSQGP7F2NH`
+Zoom | `XP99J3KP4XZ4VV`
 
 ========================================================================
 
