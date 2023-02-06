@@ -2,12 +2,18 @@
 # By David Mear (July 2022)
 
 # Script Pre-Reqs & Variables
-Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force #Install NuGet
-Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
-install-module RunAsUser 
-$ErrorActionPreference = "SilentlyContinue"
-New-Item -Path "C:\Temp" -Type Directory
-$env:usrAppName | Out-File 'C:\Temp\appid.txt'
+try {
+    Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force #Install NuGet
+    Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
+    install-module RunAsUser 
+    $ErrorActionPreference = "SilentlyContinue"
+    New-Item -Path "C:\Temp" -Type Directory
+    $env:usrAppName | Out-File 'C:\Temp\appid.txt'
+}
+catch {
+    Write-Output 'An unexpected error happened when importing the module. Please try again'
+    Exit 1
+}
 
 ############### SCRIPT START ###############
 $installScript = { $URL = 'https://github.com/microsoft/winget-cli/releases/download/v1.3.1872/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
@@ -58,7 +64,7 @@ Remove-Item -Path 'C:\Temp\appid.txt' -Force
 
 # Verify the install completed successfully
 if ($Output -LIKE '*Successfully installed') {
-    Write Output 'Windows Store Application installed successfully'; Exit
+    Write-Output 'Windows Store Application installed successfully'; Exit
 } else {
     Write-Output 'Windows Store Application failed to install - Check above output for diagnostic information'; Exit 1
 }
