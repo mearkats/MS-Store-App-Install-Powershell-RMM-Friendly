@@ -2,18 +2,34 @@
 # By David Mear (July 2022)
 
 # Script Pre-Reqs & Variables
-try {
-    Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force #Install NuGet
-    Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
-    install-module RunAsUser 
-    $ErrorActionPreference = "SilentlyContinue"
-    New-Item -Path "C:\Temp" -Type Directory
+    ## Install NuGet
+    try {
+        Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
+    } catch {
+        Write-Output 'Unable to install NuGet Package Provider. Script cannot continue!'; Exit 1
+    }
+    ## Set PSGallery Repository as Trusted
+    Try {
+        Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
+    } Catch {
+        Write-Output 'Unable to set PSGallery as trusted repository. Script cannot continue!'; Exit 1
+    }
+    ## Install RunAsUser Module
+    Try {
+        install-module RunAsUser -Force
+    } Catch {
+        Write-Output 'Unable to install RunAsUser Module. Script cannot continue'; Exit 1
+    }
+    ## Create temporary path
+    Try {
+        If (!(Test-Path -Path 'C:\Temp')) {
+            New-Item -Path "C:\Temp" -Type Directory -Force
+        }    
+    } Catch {
+        Write-Output 'Unable to create temp directory. Script cannot continue'; Exit 1
+    }
+    ## Output App ID to file
     $env:usrAppName | Out-File 'C:\Temp\appid.txt'
-}
-catch {
-    Write-Output 'An unexpected error happened when importing the module. Please try again'
-    Exit 1
-}
 
 ############### SCRIPT START ###############
 $installScript = { $URL = 'https://github.com/microsoft/winget-cli/releases/download/v1.3.1872/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
