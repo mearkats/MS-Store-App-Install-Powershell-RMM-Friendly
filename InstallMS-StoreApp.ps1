@@ -29,7 +29,16 @@
         Write-Output 'Unable to create temp directory. Script cannot continue'; Exit 1
     }
     ## Output App ID to file
-    $env:usrAppName | Out-File 'C:\Temp\appid.txt'
+    if ($null -eq $env:usrAppName) {
+        Write-Output 'Custom ID has been selected'
+        If ($null -eq $env:usrAppID) {
+            Write-Output 'Custom ID has not been provided. Please run again and provide an AppID'; Exit 1
+        } else {
+            $env:usrAppID | Out-File 'C:\Temp\appid.txt'
+        }
+    } else {
+        $env:usrAppName | Out-File 'C:\Temp\appid.txt'
+}
 
 ############### SCRIPT START ###############
 $installScript = { $URL = 'https://github.com/microsoft/winget-cli/releases/download/v1.3.1872/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
