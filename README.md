@@ -1,4 +1,6 @@
-![CroppedMK](https://user-images.githubusercontent.com/16869300/191701451-5550afce-b19f-4f8c-9e28-90777dd441e1.png)
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/16869300/191701451-5550afce-b19f-4f8c-9e28-90777dd441e1.png" />
+</p>
 
 # Microsoft Store App Install Powershell Script - RMM Friendly!!
 
