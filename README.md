@@ -2,6 +2,8 @@
 
 # Microsoft Store App Install Powershell Script - RMM Friendly!!
 
+![Build](https://img.shields.io/badge/Build-Passing-Success)
+
 Hello and welcome!
 This script allows the user to install a Microsoft Store App. As the title suggests, its RMM friendly, tested with [Datto RMM](https://www.datto.com/products/rmm/) and [Tactical RMM](https://github.com/amidaware/tacticalrmm). 
 
