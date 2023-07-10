@@ -41,7 +41,7 @@
 }
 
 ############### SCRIPT START ###############
-$installScript = { $URL = 'https://github.com/microsoft/winget-cli/releases/download/v1.3.1872/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
+$installScript = {$URL = 'https://github.com/microsoft/winget-cli/releases/download/v1.3.1872/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
 $destination = 'C:\Temp\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
 $wingetversion = winget --version 
 $wingetversion = $wingetversion.split('.')[1].Trim()
@@ -81,15 +81,17 @@ invoke-ascurrentuser -scriptblock $installScript
 
 # Collect Output and display to RMM
 $Output = (get-content "C:\Temp\WinGet.txt" | convertfrom-json)
-$Output
 
 # Remove Log Files
 Remove-Item -Path 'C:\Temp\WinGet.txt' -Force
 Remove-Item -Path 'C:\Temp\appid.txt' -Force
 
 # Verify the install completed successfully
-if ($Output -LIKE '*Successfully installed') {
-    Write-Output 'Windows Store Application installed successfully'; Exit
+if ($Output -like '*Found an existing package*') {
+    Write-Output 'Application already installed. Nothing to do!'; Exit
+} elseif ($Output -like '*Successfully installed') {
+    Write-Output 'Application installed successfully'; Exit
 } else {
+    $Output
     Write-Output 'Windows Store Application failed to install - Check above output for diagnostic information'; Exit 1
 }
