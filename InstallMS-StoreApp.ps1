@@ -1,5 +1,9 @@
 # Script to prepare Windows and installing the specified app from the MS Store
 # By David Mear (July 2022)
+# Updated Jan 2023 - Added better error handling for the critical components 
+# Updated Mar 2023 - Provided a way to provide a custom application ID.
+# Updated July 2023 - Improved the installation verification stage. 
+# Updated Jan 2024 - Fixed an issue where installing applications from the WinGet repository, would show a UAC prompt. Fixed by allowing System to install the application machine-wide
 
 # Script Pre-Reqs & Variables
     ## Install NuGet
@@ -28,6 +32,42 @@
     } Catch {
         Write-Output 'Unable to create temp directory. Script cannot continue'; Exit 1
     }
+# Install WinGet SystemWide
+Try {
+    #WebClient
+    $dc = New-Object net.webclient
+    $dc.UseDefaultCredentials = $true
+    $dc.Headers.Add("user-agent", "Inter Explorer")
+    $dc.Headers.Add("X-FORMS_BASED_AUTH_ACCEPTED", "f")
+
+    #temp folder
+    $InstallerFolder = $(Join-Path $env:ProgramData CustomScripts)
+    if (!(Test-Path $InstallerFolder)) {
+        New-Item -Path $InstallerFolder -ItemType Directory -Force -Confirm:$false
+    }   
+    #Check Winget Install
+    Write-Host "Checking if Winget is installed" -ForegroundColor Yellow
+    $TestWinget = Get-AppxProvisionedPackage -Online | Where-Object {$_.DisplayName -eq "Microsoft.DesktopAppInstaller"}
+    If ([Version]$TestWinGet. Version -gt "2022.506.16.0") {
+        Write-Host "WinGet is Installed" -ForegroundColor Green
+    } Else {
+        #Download WinGet MSIXBundle
+        Write-Host "Not installed. Downloading WinGet..." 
+        $WinGetURL = "https://aka.ms/getwinget"
+        $dc.DownloadFile($WinGetURL, "$InstallerFolder\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle")
+    
+        #Install WinGet MSIXBundle 
+        Try 	{
+            Write-Host "Installing MSIXBundle for App Installer..." 
+            Add-AppxProvisionedPackage -Online -PackagePath "$InstallerFolder\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" -SkipLicense 
+            Write-Host "Installed MSIXBundle for App Installer" -ForegroundColor Green
+        } Catch {
+            Write-Host "Failed to install MSIXBundle for App Installer..." -ForegroundColor Red
+            } 
+        }   
+    } Catch {
+        Write-Output 'Unable to install WinGet. Script cannot continue'; Exit 1
+    }
     ## Output App ID to file
     if ($null -eq $env:usrAppName) {
         Write-Output 'Custom ID has been selected'
@@ -39,6 +79,12 @@
     } else {
         $env:usrAppName | Out-File 'C:\Temp\appid.txt'
 }
+$ResolveWingetPath = Resolve-Path "C:\Program Files\WindowsApps\Microsoft.DesktopAppInstaller_*_x64__8wekyb3d8bbwe"
+if ($ResolveWingetPath){
+    $WingetPath = $ResolveWingetPath[-1].Path
+
+}
+$application = Get-Content -Path 'C:\Temp\Temp\appid.txt'
 
 ############### SCRIPT START ###############
 $installScript = {$URL = 'https://github.com/microsoft/winget-cli/releases/download/v1.3.1872/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
@@ -72,7 +118,21 @@ $wingetsys = $WingetCmd.Source
 }
 
 # Lets get it installed!
-& $wingetsys install --id=$application -e -h --accept-package-agreements --accept-source-agreements | ConvertTo-Json | Out-File 'C:\Temp\WinGet.txt'
+# Check which repository the application is installed from (msstore/winget)
+$msstoreResult = winget search --source msstore $application
+$msstoreAvailable = $msstoreResult -match $application
+$wingetResult = winget search --source winget $application
+$wingetAvailable = $wingetResult -match $application
+
+# Lets get it installed
+if ($msstoreAvailable) {
+    Write-Output "The app ID '$application' is available in the Microsoft Store."
+    & $wingetsys install --id=$application -e -h --source msstore --accept-package-agreements --accept-source-agreements | ConvertTo-Json | Out-File 'C:\Temp\Temp\WinGet.txt'
+} elseif ($wingetAvailable) {
+    Write-Output "The app ID '$application' is available in the WinGet repository." | ConvertTo-Json | Out-File 'C:\Temp\Temp\WinGet.txt'
+} else {
+    Write-Output "The app ID '$application' is not available for installation via WinGet" | ConvertTo-Json | Out-File 'C:\Temp\Temp\WinGet.txt'
+}
 }
 ############### END ###############
 
@@ -85,6 +145,11 @@ $Output = (get-content "C:\Temp\WinGet.txt" | convertfrom-json)
 # Remove Log Files
 Remove-Item -Path 'C:\Temp\WinGet.txt' -Force
 Remove-Item -Path 'C:\Temp\appid.txt' -Force
+
+If ($Output -Like '*is available in the WinGet repository.') {
+    Set-Location $wingetpath
+    $Output = .\winget.exe install --id $application --source winget --silent --scope machine
+}
 
 # Verify the install completed successfully
 if ($Output -like '*Found an existing package*') {
