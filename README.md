@@ -15,6 +15,8 @@ As of the 29/09/2022, you can use the script with an enviroment variable using t
 
 As of 06/02/2023, Better error handling has been written into the script.
 
+As of 17/01/2025, this script will now handle both Microsoft Store and WinGet installations as both are installed slightly different. The Microsoft Store apps are installed in the user context while WinGet is installed with the machine context.
+
 If this script helped you, please give it a star to show your appreciation. 
 
 =======================================================================
